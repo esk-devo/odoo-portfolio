@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { sendMessage } from "../lib/sendMessage";
 
-// Handles the contact form submission to /api/contact.
+// Handles the contact form submission (Web3Forms, no backend).
 export default function useContactForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const [message, setMessage] = useState("");
@@ -8,25 +9,28 @@ export default function useContactForm() {
   async function submit(payload) {
     setStatus("sending");
     setMessage("");
+
+    // Honeypot filled = bot. Pretend success, send nothing (saves the monthly quota).
+    if (payload.botcheck) {
+      setStatus("success");
+      setMessage("Thanks! Your message has been sent.");
+      return true;
+    }
+
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setStatus("success");
-        setMessage(data.devMode ? "Sent (dev mode: logged to console)." : "Thanks! Your message has been sent.");
-        return true;
-      } else {
-        setStatus("error");
-        setMessage(data.message || "Something went wrong. Please try again.");
-        return false;
-      }
+      await sendMessage(payload);
+      setStatus("success");
+      setMessage("Thanks! Your message has been sent.");
+      return true;
     } catch (err) {
       setStatus("error");
-      setMessage("Network error. Please try again.");
+      setMessage(
+        err.message === "MISSING_KEY"
+          ? "The form isn't available right now — please reach me on WhatsApp or email."
+          : err.message === "Failed to fetch"
+            ? "Network error. Please check your connection and try again."
+            : err.message
+      );
       return false;
     }
   }

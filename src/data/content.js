@@ -1,9 +1,3 @@
-// ============================================================
-// ALL site copy lives here. Components only read from this file.
-// TODO items are tracked in CLAUDE.md.
-// ============================================================
-
-// The name is defined ONCE here and reused everywhere.
 const NAME = "Shady El Agamy";
 
 export const profile = {
@@ -186,17 +180,28 @@ export const projects = [
   { name: "Abu El-Khair · Ajiad · Al Marakhia · Al Dawliya", industry: "Trading, import & services", icon: "building", country: "EG", modules: ["Full cycle", "Sales", "Purchase", "HR", "Accounting"] }, // TODO: confirm country
 ];
 
-// Contact form fields: static label above + placeholder hint inside.
+// Contact form: static label above + placeholder hint inside.
 export const contactForm = {
+  submit: "Send message",
+  sending: "Sending...",
+  success: "Thanks! Your message has been sent.",
+  successTitle: "Thanks, {name}! Your message has been sent.",
+  successText: "Shady will get back to you at {email} as soon as possible.",
+  sendAnother: "Send another message",
+  sendAnotherHint: "Press the check to send another message",
+  error: "Something went wrong. Please try again.",
   fields: [
-    { name: "name", id: "contact-name", type: "text", label: "Full name", placeholder: "Your name", autoComplete: "name" },
-    { name: "email", id: "contact-email", type: "email", label: "Email", placeholder: "you@company.com", autoComplete: "email" },
+    { name: "name", id: "contact-name", type: "text", label: "Full name", placeholder: "Your name", autoComplete: "name", required: true },
+    { name: "email", id: "contact-email", type: "email", label: "Email", placeholder: "you@company.com", autoComplete: "email", required: true },
+    { name: "company", id: "contact-company", type: "text", label: "Company (optional)", placeholder: "Your company", autoComplete: "organization" },
+    { name: "phone", id: "contact-phone", type: "tel", label: "Phone (optional)", placeholder: "+20 100 000 0000", autoComplete: "tel", inputMode: "tel" },
     {
       name: "message",
       id: "contact-message",
       type: "textarea",
       label: "Message",
       placeholder: "Tell me about your business and which Odoo modules you need...",
+      required: true,
     },
   ],
 };
