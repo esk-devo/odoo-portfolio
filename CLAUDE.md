@@ -88,7 +88,7 @@ Test widths: 360, 390, 768, 1024, 1280.
 - **Marquee:** same, tiles 56px tall on mobile (64px desktop).
 - **About:** photo on top (max-width ~320px, centered), text under it. Chips stay inside the photo box.
 - **Experience:** same timeline, smaller gaps.
-- **Expertise:** 1 column on mobile (no spans), 2 on tablet, 3 on desktop. Accounting and Studio span 2 columns on desktop only.
+- **Expertise:** 1 column on mobile (no spans), 2 on tablet, 3 on desktop. Desktop rows: Accounting ×2 + Inventory / Sales + Purchase + POS / HR + Studio ×2 (no gaps). Tablet: only Accounting spans the full row, so the 2-column grid also ends without a gap.
 - **How it connects:** VERTICAL on mobile and tablet (line on the left, nodes stacked), horizontal on desktop only.
 - **Projects:** 1 / 2 / 3 columns.
 - **Contact:** stacked — channel cards first, form under them. LinkedIn and GitHub stay side by side.

@@ -6,9 +6,7 @@ import Hero from "./components/Hero";
 import ClientsMarquee from "./components/ClientsMarquee";
 import About from "./components/About";
 import Experience from "./components/Experience";
-import Services from "./components/Services";
-import Skills from "./components/Skills";
-import Modules from "./components/Modules";
+import Expertise from "./components/Expertise";
 import Process from "./components/Process";
 import Cases from "./components/Cases";
 import FlowDiagram from "./components/FlowDiagram";
@@ -26,9 +24,7 @@ export default function App() {
         <ClientsMarquee />
         <About />
         <Experience />
-        <Services />
-        <Skills />
-        <Modules />
+        <Expertise />
         <Process />
         <Cases />
         <FlowDiagram />

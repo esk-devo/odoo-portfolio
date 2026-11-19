@@ -1,82 +1,73 @@
-import React, { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import useFinePointer from "../../hooks/useFinePointer";
 
-// 3D tilt card with cursor-following spotlight. Touch devices get a simple press.
-export default function TiltCard({ children, className = "", max = 6 }) {
+const SPRING = { stiffness: 170, damping: 20, mass: 0.6 };
+
+// Card that tilts toward the mouse (max ~6°), lifts 6px, gets a purple-tinted
+// shadow and a soft glare that follows the cursor.
+// Touch devices and reduced motion: no tilt/lift/glare — only the shadow changes on hover.
+// `as` = "div" | "article" | "a" (extra props like href are passed through).
+export default function TiltCard({ as = "div", className = "", children, max = 6, glare = true, ...rest }) {
   const reduce = useReducedMotion();
+  const fine = useFinePointer();
+  const tilt = fine && !reduce;
+  const Comp = motion[as] || motion.div;
   const ref = useRef(null);
-  const [touch, setTouch] = useState(false);
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const sx = useSpring(rx, { stiffness: 150, damping: 18 });
-  const sy = useSpring(ry, { stiffness: 150, damping: 18 });
 
-  React.useEffect(() => {
-    setTouch(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
+  // Cursor position inside the card (0…1) and hover amount (0…1)
+  const px = useMotionValue(0.5);
+  const py = useMotionValue(0.5);
+  const hover = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(py, [0, 1], [max, -max]), SPRING);
+  const rotateY = useSpring(useTransform(px, [0, 1], [-max, max]), SPRING);
+  const y = useSpring(useTransform(hover, [0, 1], [0, -6]), SPRING);
+  const glareOpacity = useSpring(hover, SPRING);
+  const gx = useTransform(px, (v) => `${v * 100}%`);
+  const gy = useTransform(py, (v) => `${v * 100}%`);
+  const glareBg = useMotionTemplate`radial-gradient(300px circle at ${gx} ${gy}, rgba(255,255,255,0.22), transparent 60%)`;
 
   const onMove = (e) => {
-    if (touch || reduce) return;
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    ry.set((px - 0.5) * max * 2);
-    rx.set((0.5 - py) * max * 2);
-    el.style.setProperty("--mx", (px * 100) + "%");
-    el.style.setProperty("--my", (py * 100) + "%");
+    if (!tilt || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    px.set((e.clientX - r.left) / r.width);
+    py.set((e.clientY - r.top) / r.height);
+    hover.set(1);
   };
-
   const onLeave = () => {
-    rx.set(0);
-    ry.set(0);
-    if (ref.current) {
-      ref.current.style.setProperty("--mx", "50%");
-      ref.current.style.setProperty("--my", "50%");
-    }
+    px.set(0.5);
+    py.set(0.5);
+    hover.set(0);
   };
 
-  if (touch || reduce) {
-    return (
-      <motion.div
-        whileTap={{ scale: 0.98 }}
-        className={className}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {children}
-      </motion.div>
-    );
-  }
+  const shadow =
+    "shadow-[0_1px_2px_rgba(31,41,55,0.04)] transition-shadow duration-300 hover:shadow-[0_22px_45px_-18px_rgba(113,75,103,0.38)] dark:hover:shadow-[0_22px_45px_-18px_rgba(0,0,0,0.7)]";
 
   return (
-    <motion.div
+    <Comp
       ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{
-        rotateX: sx,
-        rotateY: sy,
-        transformPerspective: 900,
-        transformStyle: "preserve-3d",
-      }}
-      className={`relative group ${className}`}
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
+      style={tilt ? { rotateX, rotateY, y, transformPerspective: 900 } : undefined}
+      className={`relative ${shadow} ${className}`}
+      {...rest}
     >
       {children}
-      {/* spotlight */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background:
-            "radial-gradient(260px circle at var(--mx,50%) var(--my,50%), var(--glow), transparent 70%)",
-        }}
-      />
-      {/* brighter border */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-1 ring-gold/20"
-      />
-    </motion.div>
+      {tilt && glare && (
+        <motion.span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[inherit]"
+          style={{ background: glareBg, opacity: glareOpacity }}
+        />
+      )}
+    </Comp>
   );
 }
