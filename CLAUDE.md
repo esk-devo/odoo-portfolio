@@ -72,7 +72,8 @@ Nav links: About, Experience, Expertise, Projects, **How it connects** (label ma
 - WhatsApp: the card shows only "Chat on WhatsApp". The link uses the number (https://wa.me/201228050845) but the phone number is **never displayed as text** anywhere on the page.
 - Stats: "2+ Years hands-on with Odoo", "10 Live implementation projects", "4 Odoo partners worked with", "2 Countries — Egypt & KSA".
 - Clients marquee: **clients only** — YAM Automotive, Xpert Logistics, OZ Veterinary, Mabrouka, Daira Rahal, Abu El-Khair, Ajiad, Al Marakhia, Al Dawliya. (Employers Ramz, Transformix, ERP Bank, I Solutions appear only in Experience.) Initials badge until logos arrive.
-- About tags (7): Accounting & financial flow · Business process analysis · Training & go-live · Client relationship management · Account management · Lead qualification · Technical & functional support.
+- About tags (7): Odoo implementation · Accounting & financial flow · Business process analysis · Client relationship management · Account management · Lead qualification · Technical & functional support.
+- All 12 skills from the brief must keep their own label on the page (About pills + Studio pills cover them).
 - Studio card pills: Views editing (XML) · Business logic (Python) · Report customization · User training & go-live · Process analysis · Odoo configuration.
 - About also holds the Education / Languages row.
 - LinkedIn: https://www.linkedin.com/in/shady-elagamy/ · GitHub placeholder: https://github.com/TODO

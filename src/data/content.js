@@ -105,9 +105,9 @@ export const about = {
   text:
     "I'm an Odoo Implementer and Technical Support Specialist with 2 years of experience in configuration, customization, implementation, user training and business process analysis. I gather requirements, configure the right modules, test, troubleshoot — and stay with clients through go-live.",
   tags: [
+    "Odoo implementation",
     "Accounting & financial flow",
     "Business process analysis",
-    "Training & go-live",
     "Client relationship management",
     "Account management",
     "Lead qualification",
