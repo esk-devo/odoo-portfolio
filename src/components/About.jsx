@@ -1,30 +1,61 @@
-import React from "react";
+import { ArrowRight, Github } from "lucide-react";
 import Reveal from "./ui/Reveal";
-import Counter from "./ui/Counter";
-import { siteData } from "../data/siteData";
+import SectionHeading from "./ui/SectionHeading";
+import PortraitOrbit from "./ui/PortraitOrbit";
+import { focusRing } from "./ui/focus";
+import { profile, about } from "../data/content";
 
 export default function About() {
-  const { about } = siteData;
   return (
-    <section id="about" className="scroll-mt-24 py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-text text-start">{about.title}</h2>
-          <p className="mt-4 text-text-muted max-w-3xl text-start leading-relaxed">{about.paragraph}</p>
+    <section id="about" aria-labelledby="about-title" className="overflow-x-clip bg-bg-2 py-20 sm:py-24 lg:py-28">
+      <div className="mx-auto grid max-w-[1264px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-[520px_minmax(0,1fr)] lg:gap-20 lg:px-8">
+        {/* Photo: on top on mobile/tablet, left on desktop */}
+        <Reveal className="px-2 pt-6 sm:px-0 lg:pt-0">
+          <PortraitOrbit />
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {about.stats.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.08}>
-              <div className="rounded-2xl bg-surface border border-border p-5 text-center shadow-sm hover:border-primary-soft/40 transition">
-                <div className="text-3xl font-display font-bold text-text">
-                  <Counter value={stat.value} />
-                </div>
-                <div className="mt-1 text-sm text-text-muted">{stat.label}</div>
+        {/* Text */}
+        <Reveal delay={0.1} className="min-w-0">
+          <SectionHeading id="about-title" eyebrow={about.eyebrow} title={about.title} className="max-w-[580px]" />
+
+          <p className="mt-6 max-w-[600px] text-base leading-[1.75] text-muted sm:text-[17px]">{about.text}</p>
+
+          <ul className="mt-6 flex flex-wrap gap-2.5">
+            {about.tags.map((tag) => (
+              <li key={tag} className="rounded-full border border-border bg-surface px-3.5 py-1.5 text-[15px] text-text">
+                {tag}
+              </li>
+            ))}
+          </ul>
+
+          <dl className="mt-7 grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
+            {[about.education, about.languages].map((row) => (
+              <div key={row.label}>
+                <dt className="text-sm text-subtle">{row.label}</dt>
+                <dd className="mt-1 text-base font-semibold text-text">{row.value}</dd>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </dl>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#contact"
+              className={`inline-flex h-[52px] items-center gap-2 rounded-xl bg-primary px-6 text-base font-semibold text-white transition-colors hover:bg-primary-hover ${focusRing}`}
+            >
+              {about.ctaPrimary}
+              <ArrowRight size={18} aria-hidden="true" />
+            </a>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex h-[52px] items-center gap-2 rounded-xl border border-border bg-surface px-6 text-base font-semibold text-text transition-colors hover:bg-purple-soft ${focusRing}`}
+            >
+              <Github size={18} aria-hidden="true" />
+              {about.ctaGithub}
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

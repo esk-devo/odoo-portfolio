@@ -58,6 +58,17 @@
     to { transform: translateX(-50%); }
   }
 
+  /* About photo: slow orbit ring + gently floating chips. */
+  --animate-orbit: orbit 40s linear infinite;
+  --animate-float: float 5s ease-in-out infinite;
+  @keyframes orbit {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
   --color-bg: var(--bg);
   --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);

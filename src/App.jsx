@@ -12,7 +12,6 @@ import Modules from "./components/Modules";
 import Process from "./components/Process";
 import Cases from "./components/Cases";
 import FlowDiagram from "./components/FlowDiagram";
-import Education from "./components/Education";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -33,7 +32,6 @@ export default function App() {
         <Process />
         <Cases />
         <FlowDiagram />
-        <Education />
         <Contact />
       </main>
       <Footer />

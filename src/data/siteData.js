@@ -214,19 +214,6 @@ export const siteData = {
     ],
   },
 
-  education: {
-    title: "Education",
-    items: [
-      {
-        degree: "Bachelor of Information Technology", // REPLACE ME if needed
-        school: "University name (REPLACE ME)",
-        status: "Still studying",
-        years: "REPLACE ME",
-      },
-    ],
-    languages: "Arabic (Native), English (Good working proficiency)",
-  },
-
   flow: {
     title: "How it connects",
     subtitle: "How Odoo modules work together in a typical flow.",
