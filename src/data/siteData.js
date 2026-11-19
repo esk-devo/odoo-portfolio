@@ -88,19 +88,6 @@ export const siteData = {
     ],
   },
 
-  process: {
-    title: "My Process",
-    subtitle: "How I take a project from idea to go-live.",
-    steps: [
-      { title: "Requirements", description: "Gather and analyze business requirements." },
-      { title: "Configuration", description: "Configure modules and workflows in Odoo." },
-      { title: "Testing", description: "Test scenarios and fix issues before go-live." },
-      { title: "Training", description: "Train users and key users." },
-      { title: "Go-live", description: "Support the go-live and cutover." },
-      { title: "Support", description: "Post-go-live support and improvements." },
-    ],
-  },
-
   showClientNames: true, // set false to hide client names quickly
 
   projects: {
@@ -142,18 +129,6 @@ export const siteData = {
         modules: ["Sales", "Purchase", "HR", "Accounting"],
         role: "Full-cycle implementation",
       },
-    ],
-  },
-
-  flow: {
-    title: "How it connects",
-    subtitle: "How Odoo modules work together in a typical flow.",
-    nodes: [
-      { name: "Sales", description: "Orders are created and confirmed." },
-      { name: "Inventory", description: "Stock is reserved and delivered." },
-      { name: "Purchase", description: "Replenishment orders are raised." },
-      { name: "Accounting", description: "Invoices and payments are recorded." },
-      { name: "Reports", description: "Insights are generated from the data." },
     ],
   },
 

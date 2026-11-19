@@ -166,7 +166,7 @@ export const flow = [
   { key: "inventory", title: "Inventory", text: "Delivery and stock moves" },
   { key: "purchase", title: "Purchase", text: "Replenishment and vendor bills" },
   { key: "accounting", title: "Accounting", text: "Journal entries post automatically", highlight: true },
-  { key: "reports", title: "Reports", text: "P&L and balance sheet, live" },
+  { key: "reports", title: "Reports", text: "P&L and balance sheet, live", tone: "teal" },
 ];
 
 export const projectsSection = {

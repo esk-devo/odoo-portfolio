@@ -7,9 +7,8 @@ import ClientsMarquee from "./components/ClientsMarquee";
 import About from "./components/About";
 import Experience from "./components/Experience";
 import Expertise from "./components/Expertise";
-import Process from "./components/Process";
+import HowItConnects from "./components/HowItConnects";
 import Cases from "./components/Cases";
-import FlowDiagram from "./components/FlowDiagram";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -25,9 +24,8 @@ export default function App() {
         <About />
         <Experience />
         <Expertise />
-        <Process />
+        <HowItConnects />
         <Cases />
-        <FlowDiagram />
         <Contact />
       </main>
       <Footer />
