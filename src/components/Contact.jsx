@@ -4,7 +4,7 @@ import { MessageCircle, Mail, Linkedin, Github, ArrowUpRight } from "lucide-reac
 import Reveal from "./ui/Reveal";
 import SectionHeading from "./ui/SectionHeading";
 import { focusRing } from "./ui/focus";
-import { profile, contactSection } from "../data/content";
+import { profile, contactSection, contactForm } from "../data/content";
 // LEGACY — only the form copy still comes from siteData until the form rebuild (step 12).
 import { siteData } from "../data/siteData";
 import useContactForm from "../hooks/useContactForm";
@@ -31,10 +31,10 @@ export default function Contact() {
     if (ok) el.reset();
   }
 
+  // Static label above each field (linked with htmlFor/id); placeholder stays as a hint.
   const fieldClass =
-    "peer w-full rounded-xl border border-border bg-bg px-4 pt-5 pb-2 text-text placeholder-transparent transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 dark:focus:border-primary-tx dark:focus:ring-primary-tx/25";
-  const labelClass =
-    "pointer-events-none absolute start-4 top-3.5 text-sm text-muted transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-focus:-top-2 peer-focus:text-xs peer-focus:text-primary-tx peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs";
+    "w-full rounded-xl border border-border bg-bg px-4 py-3 text-base text-text placeholder:text-subtle transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 dark:focus:border-primary-tx dark:focus:ring-primary-tx/25";
+  const labelClass = "mb-2 block text-[15px] font-semibold text-text";
 
   return (
     <section id="contact" aria-labelledby="contact-title" className="bg-bg-2 py-20 sm:py-24 lg:py-28">
@@ -105,18 +105,33 @@ export default function Contact() {
             onSubmit={handleSubmit}
             className="space-y-5 rounded-3xl border border-border bg-surface p-6 shadow-[0_24px_60px_-28px_rgba(31,41,55,0.25)] dark:shadow-[0_24px_60px_-28px_rgba(0,0,0,0.6)] sm:p-8"
           >
-            <div className="relative">
-              <input name="name" type="text" required placeholder=" " className={fieldClass} />
-              <label className={labelClass}>{form.namePlaceholder}</label>
-            </div>
-            <div className="relative">
-              <input name="email" type="email" required placeholder=" " className={fieldClass} />
-              <label className={labelClass}>{form.emailPlaceholder}</label>
-            </div>
-            <div className="relative">
-              <textarea name="message" required rows={5} placeholder=" " className={`${fieldClass} resize-none`} />
-              <label className={labelClass}>{form.messagePlaceholder}</label>
-            </div>
+            {contactForm.fields.map((f) => (
+              <div key={f.name}>
+                <label htmlFor={f.id} className={labelClass}>
+                  {f.label}
+                </label>
+                {f.type === "textarea" ? (
+                  <textarea
+                    id={f.id}
+                    name={f.name}
+                    required
+                    rows={5}
+                    placeholder={f.placeholder}
+                    className={`${fieldClass} resize-none`}
+                  />
+                ) : (
+                  <input
+                    id={f.id}
+                    name={f.name}
+                    type={f.type}
+                    required
+                    placeholder={f.placeholder}
+                    autoComplete={f.autoComplete}
+                    className={fieldClass}
+                  />
+                )}
+              </div>
+            ))}
             {/* honeypot */}
             <input name="website" type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 

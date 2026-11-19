@@ -186,6 +186,21 @@ export const projects = [
   { name: "Abu El-Khair · Ajiad · Al Marakhia · Al Dawliya", industry: "Trading, import & services", icon: "building", country: "EG", modules: ["Full cycle", "Sales", "Purchase", "HR", "Accounting"] }, // TODO: confirm country
 ];
 
+// Contact form fields: static label above + placeholder hint inside.
+export const contactForm = {
+  fields: [
+    { name: "name", id: "contact-name", type: "text", label: "Full name", placeholder: "Your name", autoComplete: "name" },
+    { name: "email", id: "contact-email", type: "email", label: "Email", placeholder: "you@company.com", autoComplete: "email" },
+    {
+      name: "message",
+      id: "contact-message",
+      type: "textarea",
+      label: "Message",
+      placeholder: "Tell me about your business and which Odoo modules you need...",
+    },
+  ],
+};
+
 export const contactSection = {
   eyebrow: "06 — Contact",
   title: "Have an Odoo project or an opportunity? Let's talk.",

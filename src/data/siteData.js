@@ -7,9 +7,6 @@
 export const siteData = {
   contact: {
     form: {
-      namePlaceholder: "Your name",
-      emailPlaceholder: "Your email",
-      messagePlaceholder: "Your message",
       submit: "Send message",
       sending: "Sending...",
       success: "Thanks! Your message has been sent.",
