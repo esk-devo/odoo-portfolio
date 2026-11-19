@@ -48,14 +48,25 @@ export const hero = {
   ctaPrimary: "Start a project",
   ctaWhatsapp: "WhatsApp",
   dashboard: {
+    ariaLabel: "Example Odoo accounting dashboard: revenue vs. expenses chart and posted journal entries",
     title: "Accounting Dashboard",
     subtitle: "Odoo 18 · this month",
     chartTitle: "Revenue vs. expenses",
     legend: ["Revenue", "Expenses"],
+    // Bar heights in % of the chart (revenue, expenses) — shapes match the design, no numbers shown.
+    bars: [
+      [47, 31],
+      [60, 38],
+      [52, 42],
+      [75, 44],
+      [69, 40],
+      [92, 48],
+    ],
+    // strip: row marker colour · pill: status pill colour (gold strip only on Stock valuation)
     rows: [
-      { label: "Customer invoice", status: "Posted", tone: "purple" },
-      { label: "Vendor bill", status: "Posted", tone: "teal" },
-      { label: "Stock valuation entry", status: "Draft", tone: "gold" },
+      { label: "Customer invoice", status: "Posted", strip: "purple", pill: "teal" },
+      { label: "Vendor bill", status: "Posted", strip: "teal", pill: "teal" },
+      { label: "Stock valuation entry", status: "Draft", strip: "gold", pill: "purple" },
     ],
     chipJournal: { title: "Journal entry created", text: "automatically on invoice" },
     chipFlow: ["Sale", "Delivery", "Invoice"],

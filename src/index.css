@@ -86,10 +86,26 @@
   --gold: var(--primary-tx);
 }
 
-/* Legacy: outlined "ODOO" text in the old hero (remove in step 4). */
-.outline-text {
-  -webkit-text-stroke: 1.5px var(--glow);
-  color: transparent;
+/* Hero background — light: subtle 64px grid that fades out at the bottom.
+   Dark: NO grid, only soft purple (top-left) + teal (right) glows over #151B2B → #111827. */
+.hero-bg {
+  background-image:
+    linear-gradient(to right, rgba(31, 41, 55, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 41, 55, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent);
+}
+
+.dark .hero-bg {
+  background-image:
+    radial-gradient(55% 60% at 12% 0%, rgba(113, 75, 103, 0.32), transparent 70%),
+    radial-gradient(40% 50% at 92% 35%, rgba(0, 160, 157, 0.16), transparent 70%),
+    linear-gradient(180deg, #151B2B 0%, #111827 100%);
+  background-size: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 html {
