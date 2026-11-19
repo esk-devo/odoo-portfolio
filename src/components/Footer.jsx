@@ -1,30 +1,32 @@
-import React from "react";
-import { siteData } from "../data/siteData";
+import Logo from "./Logo";
+import { focusRing } from "./ui/focus";
+import { profile, footer } from "../data/content";
 
+// Follows the theme (light in light mode). Stacked + centered on mobile.
 export default function Footer() {
-  const { footer, person } = siteData;
+  const year = new Date().getFullYear();
+  const { builtBy } = footer;
+
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#1B1B3A] py-10 text-white">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-display font-bold text-white/[0.04] leading-none select-none"
-        style={{ fontSize: "clamp(80px, 18vw, 220px)" }}
-      >
-        {person.name.split(" ")[0].toUpperCase()}
-      </div>
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/70">
-        <div>{footer.copyright.replace("Shady Elagamy", person.name)}</div>
-        <div className="text-white/50">
-          Built by{" "}
+    <footer className="border-t border-border bg-bg">
+      <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-3 px-4 py-8 text-center text-base text-muted sm:flex-row sm:justify-between sm:px-6 sm:text-left lg:px-8">
+        <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
+          <Logo size={24} />
+          <p>
+            © {year} {profile.name}. {footer.rights}
+          </p>
+        </div>
+        <p>
+          {builtBy.label}{" "}
           <a
-            href="https://eskdev.vercel.app/"
+            href={builtBy.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gold hover:underline"
+            className={`rounded font-semibold text-primary-tx underline-offset-4 hover:underline ${focusRing}`}
           >
-            eskdev
+            {builtBy.name}
           </a>
-        </div>
+        </p>
       </div>
     </footer>
   );

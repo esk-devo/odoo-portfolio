@@ -30,6 +30,20 @@ export const nav = [
 
 export const navCta = { label: "Let's talk", href: "#contact" };
 
+// Labels for icon-only buttons and landmarks (screen readers).
+export const ui = {
+  primaryNav: "Primary",
+  mobileNav: "Mobile",
+  openMenu: "Open menu",
+  closeMenu: "Close menu",
+  toDark: "Switch to dark mode",
+  toLight: "Switch to light mode",
+  github: "GitHub",
+  linkedin: "LinkedIn",
+  email: "Email",
+  home: "Back to top",
+};
+
 export const hero = {
   ctaPrimary: "Start a project",
   ctaWhatsapp: "WhatsApp",

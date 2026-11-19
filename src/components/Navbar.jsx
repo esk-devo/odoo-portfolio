@@ -1,229 +1,224 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { siteData } from "../data/siteData";
-import { useTheme } from "../contexts/ThemeContext";
+import { Menu, X, Github } from "lucide-react";
+import Logo from "./Logo";
 import ThemeToggle from "./ui/ThemeToggle";
+import { focusRing } from "./ui/focus";
+import { profile, nav, navCta, ui } from "../data/content";
 
-const nav = siteData.nav.filter((n) => ["#about", "#services", "#cases"].includes(n.href));
+const FOCUSABLE = 'a[href], button:not([disabled])';
+
+// Highlights the nav link of the section crossing the middle of the screen.
+function useActiveSection() {
+  const [active, setActive] = useState(null);
+  useEffect(() => {
+    const sections = document.querySelectorAll("main section[id]");
+    if (!sections.length || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(`#${e.target.id}`)),
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+  return active;
+}
 
 export default function Navbar() {
-  const { person } = siteData;
-  const { theme } = useTheme();
-  const dark = theme === "dark";
+  const active = useActiveSection();
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastY, setLastY] = useState(0);
-  const [active, setActive] = useState("#about");
-  const [progress, setProgress] = useState(0);
-  const pillRef = useRef(null);
+  const headerRef = useRef(null);
+  const menuButtonRef = useRef(null);
+  const sheetRef = useRef(null);
 
+  // Mobile sheet: lock page scroll, trap focus, Esc closes, auto-close on desktop width.
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (!reduce) setHidden(y > lastY && y > 80);
-      else setHidden(false);
-      setLastY(y);
-      const h = document.documentElement;
-      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-      setProgress(isFinite(pct) ? pct : 0);
-      let current = nav[0]?.href || "#about";
-      nav.forEach((n) => {
-        const el = document.querySelector(n.href);
-        if (el && el.getBoundingClientRect().top <= 120) current = n.href;
-      });
-      setActive(current);
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sheetRef.current?.querySelector(FOCUSABLE)?.focus();
+
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !sheetRef.current) return;
+      // Trap = visible controls in the bar (logo, theme, close) + everything in the sheet.
+      const items = [
+        ...headerRef.current.querySelectorAll(FOCUSABLE),
+        ...sheetRef.current.querySelectorAll(FOCUSABLE),
+      ].filter((el) => el.offsetParent !== null);
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!items.includes(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [lastY, reduce, nav]);
+    const desktop = window.matchMedia("(min-width: 56.25rem)");
+    const onResize = (e) => e.matches && setOpen(false);
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
+    };
   }, [open]);
 
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const onPillMove = (e) => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const r = pillRef.current?.getBoundingClientRect();
-    if (!r) return;
-    pillRef.current.style.setProperty("--mx", (e.clientX - r.left) + "px");
-    pillRef.current.style.setProperty("--my", (e.clientY - r.top) + "px");
-  };
+  const close = () => setOpen(false);
 
   return (
     <>
-      <header className="fixed z-[100] left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-[760px]" style={{ top: "calc(1rem + env(safe-area-inset-top))" }}>
-        <motion.div
-          ref={pillRef}
-          onMouseMove={onPillMove}
-          animate={reduce ? {} : { y: hidden ? -120 : 0 }}
-          transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 30 }}
-          className={`relative rounded-full border border-border backdrop-blur-xl backdrop-saturate-[1.4] overflow-hidden ${
-            dark
-              ? "bg-[rgba(11,11,26,0.55)] shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
-              : "bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.10)]"
-          }`}
-          style={{
-            background: dark
-              ? "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 40%, rgba(11,11,26,0.55) 100%)"
-              : "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 100%)",
-          }}
-        >
-          {/* spotlight */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-full hidden md:block"
-            style={{
-              background:
-                "radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(217,178,111,0.18), transparent 70%)",
-            }}
-          />
-          <nav aria-label="Primary" className="relative flex items-center justify-between gap-2 px-3 py-2">
-            {/* left */}
-            <a href="#hero" className="flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-xs">
-                {person.initials}
-              </span>
-              <span className="hidden lg:inline font-display font-semibold text-text text-sm">{person.name}</span>
-            </a>
-
-            {/* center links (desktop) */}
-            <ul className="hidden md:flex items-center gap-1 relative">
-              {nav.map((item) => (
-                <li key={item.href} className="relative">
-                  {active === item.href && (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full bg-text/10"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                  <a
-                    href={item.href}
-                    className={`relative z-10 block px-3 py-1.5 text-sm rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
-                      active === item.href ? "text-text" : "text-text-muted hover:text-text"
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* theme toggle (desktop) */}
-            <span className="hidden md:inline-flex items-center">
-              <ThemeToggle />
+      <header
+        ref={headerRef}
+        className="fixed inset-x-0 z-50 px-3 sm:px-4"
+        style={{ top: "calc(1rem + env(safe-area-inset-top))" }}
+      >
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-3 rounded-full border border-glass-bd bg-glass py-2 pl-3 pr-2 shadow-[0_8px_30px_rgba(31,41,55,0.08)] backdrop-blur-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)] sm:pl-4">
+          {/* Left: logo + name */}
+          <a
+            href="#top"
+            aria-label={`${profile.name} — ${ui.home}`}
+            className={`flex min-h-11 min-w-0 items-center gap-2.5 rounded-full pr-2 ${focusRing}`}
+          >
+            <Logo size={32} />
+            <span className="truncate font-display text-base font-semibold tracking-[-0.02em] text-text">
+              {profile.name}
             </span>
+          </a>
 
-            {/* right: contact pill (desktop) */}
-            <a
-              href="#contact"
-              className="hidden md:inline-flex items-center rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-white hover:bg-primary-soft transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              Contact
-            </a>
-
-            {/* mobile hamburger */}
-            <button
-              type="button"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              className="md:hidden relative w-11 h-11 rounded-full bg-text/10 flex items-center justify-center text-text focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-              onClick={() => setOpen((v) => !v)}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {open ? (
-                  <motion.span
-                    key="close"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.18 }}
-                    className="flex items-center justify-center"
-                  >
-                    <X size={22} strokeWidth={2} />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="open"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.18 }}
-                    className="flex items-center justify-center"
-                  >
-                    <Menu size={22} strokeWidth={2} />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
+          {/* Center: section links (desktop) */}
+          <nav aria-label={ui.primaryNav} className="hidden nav:block">
+            <ul className="flex items-center gap-1">
+              {nav.map((item) => {
+                const isActive = active === item.href;
+                return (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`block rounded-full px-3.5 py-2 text-[15px] font-medium transition-colors ${focusRing} ${
+                        isActive ? "bg-purple-soft text-text" : "text-muted hover:text-text"
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </nav>
 
-          {/* progress line */}
-          <div className="absolute bottom-0 start-0 end-0 h-[2px] overflow-hidden">
-            <div className="h-full bg-gold/70" style={{ width: progress + "%" }} />
+          {/* Right: GitHub + theme + CTA (desktop) / theme + hamburger (mobile) */}
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={ui.github}
+              className={`hidden h-11 w-11 items-center justify-center rounded-full text-text transition-colors hover:bg-purple-soft nav:inline-flex ${focusRing}`}
+            >
+              <Github size={20} aria-hidden="true" />
+            </a>
+            <ThemeToggle />
+            <a
+              href={navCta.href}
+              className={`hidden h-11 items-center rounded-full bg-primary px-5 text-[15px] font-semibold text-white transition-colors hover:bg-primary-hover nav:inline-flex ${focusRing}`}
+            >
+              {navCta.label}
+            </a>
+            <button
+              ref={menuButtonRef}
+              type="button"
+              aria-label={open ? ui.closeMenu : ui.openMenu}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((v) => !v)}
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface text-text nav:hidden ${focusRing}`}
+            >
+              {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+            </button>
           </div>
-        </motion.div>
+        </div>
       </header>
 
-      {/* mobile overlay + panel */}
+      {/* Mobile menu sheet (< 900px) */}
       <AnimatePresence>
         {open && (
           <>
             <motion.div
+              key="overlay"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[99] bg-black/40 backdrop-blur-sm md:hidden"
-              onClick={() => setOpen(false)}
+              transition={{ duration: reduce ? 0 : 0.2 }}
+              className="fixed inset-0 z-40 bg-[#111827]/40 backdrop-blur-sm nav:hidden"
+              onClick={close}
+              aria-hidden="true"
             />
             <motion.div
+              key="sheet"
               id="mobile-menu"
-              initial={{ opacity: 0, y: -10, scale: 0.98 }}
+              ref={sheetRef}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={reduce ? { duration: 0 } : { duration: 0.2 }}
-              className={`fixed z-[100] left-1/2 -translate-x-1/2 top-[calc(4.5rem+env(safe-area-inset-top))] w-[calc(100%-24px)] max-w-[760px] rounded-3xl border border-border backdrop-blur-xl backdrop-saturate-[1.4] shadow-2xl overflow-hidden md:hidden ${dark ? "bg-[rgba(11,11,26,0.75)]" : "bg-white/80"}`}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: reduce ? 0 : 0.2 }}
+              className="fixed inset-x-3 z-50 mx-auto max-w-[1200px] overflow-y-auto rounded-3xl border border-border bg-surface p-3 shadow-2xl sm:inset-x-4 nav:hidden"
+              style={{
+                top: "calc(5.25rem + env(safe-area-inset-top))",
+                maxHeight: "calc(100dvh - 6.5rem - env(safe-area-inset-top))",
+              }}
             >
-              <div className="max-h-[70vh] overflow-y-auto px-4 py-4">
+              <nav aria-label={ui.mobileNav}>
                 <ul className="flex flex-col gap-1">
-                  {nav.map((item, i) => (
-                    <motion.li
-                      key={item.href}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: reduce ? 0 : i * 0.05 }}
-                    >
-                      <a
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className="flex items-center min-h-[48px] px-4 rounded-2xl text-lg font-display font-medium text-text hover:bg-text/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                      >
-                        {item.label}
-                      </a>
-                    </motion.li>
-                  ))}
+                  {nav.map((item) => {
+                    const isActive = active === item.href;
+                    return (
+                      <li key={item.href}>
+                        <a
+                          href={item.href}
+                          onClick={close}
+                          aria-current={isActive ? "true" : undefined}
+                          className={`flex min-h-12 items-center rounded-2xl px-4 font-display text-lg font-medium text-text transition-colors hover:bg-purple-soft ${focusRing} ${
+                            isActive ? "bg-purple-soft" : ""
+                          }`}
+                        >
+                          {item.label}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
-                <div className="mt-3 flex items-center justify-center">
-                  <ThemeToggle />
-                </div>
+              </nav>
+              <div className="mt-2 grid gap-2 border-t border-border pt-3">
                 <a
-                  href="#contact"
-                  onClick={() => setOpen(false)}
-                  className="mt-3 flex items-center justify-center min-h-[48px] rounded-2xl bg-primary text-white font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  href={profile.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={close}
+                  className={`flex min-h-12 items-center gap-3 rounded-2xl px-4 text-base font-medium text-text transition-colors hover:bg-purple-soft ${focusRing}`}
                 >
-                  Contact
+                  <Github size={20} aria-hidden="true" />
+                  {ui.github}
+                </a>
+                <a
+                  href={navCta.href}
+                  onClick={close}
+                  className={`flex min-h-12 items-center justify-center rounded-2xl bg-primary px-5 text-base font-semibold text-white transition-colors hover:bg-primary-hover ${focusRing}`}
+                >
+                  {navCta.label}
                 </a>
               </div>
             </motion.div>
