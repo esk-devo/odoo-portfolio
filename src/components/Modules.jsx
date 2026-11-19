@@ -1,8 +1,10 @@
 import React from "react";
-import * as Icons from "lucide-react";
+import { Calculator, ShoppingCart, Package, Warehouse, Users, Briefcase, Circle } from "lucide-react";
 import Reveal from "./ui/Reveal";
 import TiltCard from "./ui/TiltCard";
 import { siteData } from "../data/siteData";
+
+const Icons = { Calculator, ShoppingCart, Package, Warehouse, Users, Briefcase, Circle };
 
 export default function Modules() {
   const { modules } = siteData;

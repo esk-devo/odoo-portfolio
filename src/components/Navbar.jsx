@@ -90,7 +90,7 @@ export default function Navbar() {
           <nav aria-label="Primary" className="relative flex items-center justify-between gap-2 px-3 py-2">
             {/* left */}
             <a href="#hero" className="flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gold text-navy font-bold text-xs">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-xs">
                 {person.initials}
               </span>
               <span className="hidden lg:inline font-display font-semibold text-text text-sm">{person.name}</span>

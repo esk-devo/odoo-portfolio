@@ -29,7 +29,7 @@ This is a **refactor of the existing project** (see `docs/PROJECT-AUDIT.md`), no
 - Odoo Teal (accent): #00A09D
 - Dark Slate (text / dark surfaces): #1F2937
 - Light Gray (background): #F8FAFC
-- Gold #D4A657 — **tiny accent only, in exactly 3 places:** the logo node at (29,82), one dot on the About orbit ring, and the left status strip of the "Stock valuation entry" row in the hero dashboard. Nowhere else.
+- Gold #D4A657 (Tailwind: `bg-accent-gold` / `fill-accent-gold`) — **tiny accent only, in exactly 3 places:** the logo node at (29,82), one dot on the About orbit ring, and the left status strip of the "Stock valuation entry" row in the hero dashboard. Nowhere else.
 
 ## Theme tokens (CSS variables, switched by the `.dark` class on <html>)
 | token        | light                     | dark                      |
@@ -68,7 +68,8 @@ Nav links: About, Experience, Expertise, Projects, **How it connects** (label ma
 
 ## Content rules
 - All copy lives in `src/data/content.js` (no hard-coded text in components). `src/data/siteData.js` is legacy and gets deleted once every section is migrated.
-- The person's name is defined **once** in `content.js` (`profile.name`) and reused everywhere (navbar, hero, footer, alt text, meta).
+- The person's name is **"Shady El Agamy"** (confirmed, as in the brief). It is defined **once** in `content.js` (`profile.name`) and reused everywhere (navbar, hero, footer, alt text, meta).
+- WhatsApp: the card shows only "Chat on WhatsApp". The link uses the number (https://wa.me/201228050845) but the phone number is **never displayed as text** anywhere on the page.
 - Stats: "2+ Years hands-on with Odoo", "10 Live implementation projects", "4 Odoo partners worked with", "2 Countries — Egypt & KSA".
 - Clients marquee: **clients only** — YAM Automotive, Xpert Logistics, OZ Veterinary, Mabrouka, Daira Rahal, Abu El-Khair, Ajiad, Al Marakhia, Al Dawliya. (Employers Ramz, Transformix, ERP Bank, I Solutions appear only in Experience.) Initials badge until logos arrive.
 - About tags: Accounting & financial flow · Business process analysis · Training & go-live · Client relationship management.
@@ -120,6 +121,4 @@ Test widths: 360, 390, 768, 1024, 1280.
 - [ ] Client logos (SVGs in `/public/logos`, plus permission to show them)
 - [ ] Qatar: any confirmed project there? (stats currently say "2 countries — Egypt & KSA")
 - [ ] Project countries — confirm Egypt for: YAM Automotive, OZ Veterinary, Mabrouka & Daira Rahal, Abu El-Khair · Ajiad · Al Marakhia · Al Dawliya
-- [ ] Name spelling: confirm "Shady El Agamy"
 - [ ] Web3Forms access key (`VITE_WEB3FORMS_KEY`)
-- [ ] WhatsApp card: show the phone number (spec) or not (design)?

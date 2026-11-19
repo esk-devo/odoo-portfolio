@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
-const ThemeContext = createContext({ theme: "light", toggle: () => {}, setTheme: () => {} });
+// Light is the default; the OS setting is ignored. Dark mode = `.dark` class on <html>.
+const ThemeContext = createContext({ theme: "light", toggleTheme: () => {}, toggle: () => {}, setTheme: () => {} });
 
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(() => {
@@ -15,12 +16,11 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") root.setAttribute("data-theme", "dark");
-    else root.removeAttribute("data-theme");
+    root.classList.toggle("dark", theme === "dark");
     try { localStorage.setItem("theme", theme); } catch {}
     root.style.colorScheme = theme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "dark" ? "#0B0B1A" : "#F8FAFC");
+    if (meta) meta.setAttribute("content", theme === "dark" ? "#111827" : "#F8FAFC");
 
     if (!firstRef.current) {
       root.classList.add("theme-switching");
@@ -34,7 +34,7 @@ export function ThemeProvider({ children }) {
   const setTheme = (t) => setThemeState(t === "dark" ? "dark" : "light");
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme: toggle, toggle, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

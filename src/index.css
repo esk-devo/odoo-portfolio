@@ -1,56 +1,91 @@
 @import "tailwindcss";
 
+/* Dark mode follows the .dark class on <html> (set by the theme toggle), not the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+   Theme tokens — values from CLAUDE.md. Light is the default.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #F8FAFC;
+  --bg-2: #F1F5F9;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --text: #1F2937;
+  --muted: #4B5563;
+  --subtle: #5F6B7A;
+  --primary-tx: #714B67;
+  --teal-tx: #007C7A;
+  --teal-soft: rgba(0, 160, 157, 0.12);
+  --purple-soft: rgba(113, 75, 103, 0.09);
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-bd: rgba(255, 255, 255, 0.9);
+  --logo-node: #714B67;
+  --logo-line: #A99AA5;
+}
+
+.dark {
+  --bg: #111827;
+  --bg-2: #0D1320;
+  --surface: #1F2937;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #F8FAFC;
+  --muted: #CBD5E1;
+  --subtle: #9AA6B6;
+  --primary-tx: #D9B3CF;
+  --teal-tx: #2CC5C1;
+  --teal-soft: rgba(0, 160, 157, 0.16);
+  --purple-soft: rgba(113, 75, 103, 0.28);
+  --glass: rgba(31, 41, 55, 0.62);
+  --glass-bd: rgba(255, 255, 255, 0.12);
+  --logo-node: #A97A9C;
+  --logo-line: #5E5462;
+}
+
+/* Tailwind names: bg-bg, bg-bg-2, bg-surface, border-border, text-text, text-muted,
+   text-subtle, bg-primary, text-primary-tx, bg-teal, text-teal-tx, bg-teal-soft, ... */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --color-bg: var(--bg);
-  --color-bg-soft: var(--bg-soft);
+  --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-text: var(--text);
-  --color-text-text-muted: var(--text-text-muted);
   --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-soft: var(--primary-soft);
-  --color-accent: var(--accent);
-  --color-gold: var(--gold);
-  --color-glow: var(--glow);
-  --color-shadow: var(--shadow);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-primary: #714B67;
+  --color-primary-tx: var(--primary-tx);
+  --color-teal: #00A09D;
+  --color-teal-tx: var(--teal-tx);
+  --color-teal-soft: var(--teal-soft);
+  --color-purple-soft: var(--purple-soft);
+  --color-glass: var(--glass);
+  --color-glass-bd: var(--glass-bd);
+  --color-accent-gold: #D4A657; /* bg-accent-gold — tiny accent only, 3 places (see CLAUDE.md) */
+
+  /* LEGACY aliases — only so the old sections keep rendering until they are
+     replaced. Remove in step 11. Old "gold" classes are mapped to purple
+     so real gold stays limited to its 3 approved places. */
+  --color-gold: var(--primary-tx);
+  --color-text-muted: var(--muted);
+  --color-accent: #00A09D;
+  --color-primary-soft: #714B67;
+  --color-surface-2: var(--bg-2);
 }
 
-:root {
-  /* Light theme (default) */
-  --bg: #F8FAFC;
-  --bg-soft: #F1F5F9;
-  --surface: #FFFFFF;
-  --surface-2: #F1F5F9;
-  --text: #1F2937;
-  --text-text-muted: #64748B;
-  --border: rgba(15, 23, 42, 0.08);
-  --primary: #714B67;
-  --primary-soft: #EDE7EC;
-  --accent: #00A09D;
-  --gold: #A8823F;
-  --glow: rgba(113, 75, 103, 0.18);
-  --shadow: rgba(15, 23, 42, 0.10);
+/* Legacy CSS variables still read by old components (remove in step 11). */
+:root,
+.dark {
+  --glow: var(--purple-soft);
+  --gold: var(--primary-tx);
 }
 
-:root[data-theme="dark"] {
-  /* Dark theme (existing look) */
-  --bg: #0B0B1A;
-  --bg-soft: #14142B;
-  --surface: #14142B;
-  --surface-2: #1B1B3A;
-  --text: #F4F4F8;
-  --text-text-muted: #A9A9C2;
-  --border: rgba(255, 255, 255, 0.12);
-  --primary: #714B67;
-  --primary-soft: #9B6B8E;
-  --accent: #017E84;
-  --gold: #D9B26F;
-  --glow: rgba(168, 120, 200, 0.22);
-  --shadow: rgba(0, 0, 0, 0.45);
+/* Legacy: outlined "ODOO" text in the old hero (remove in step 4). */
+.outline-text {
+  -webkit-text-stroke: 1.5px var(--glow);
+  color: transparent;
 }
 
 html {
@@ -61,12 +96,6 @@ body {
   font-family: var(--font-sans);
   color: var(--text);
   background-color: var(--bg);
-}
-
-/* Outlined decorative text */
-.outline-text {
-  -webkit-text-stroke: 1.5px var(--glow);
-  color: transparent;
 }
 
 /* Theme switching transition (toggled via .theme-switching on <html>) */

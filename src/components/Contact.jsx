@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import * as Icons from "lucide-react";
+import { Mail, Linkedin, MessageCircle, Circle } from "lucide-react";
 import Reveal from "./ui/Reveal";
 import TiltCard from "./ui/TiltCard";
 import { siteData } from "../data/siteData";
 import useContactForm from "../hooks/useContactForm";
+
+const Icons = { Mail, Linkedin, MessageCircle, Circle };
 
 export default function Contact() {
   const { contact, links } = siteData;

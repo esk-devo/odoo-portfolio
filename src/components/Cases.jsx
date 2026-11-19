@@ -1,8 +1,10 @@
 import React from "react";
-import * as Icons from "lucide-react";
+import { Car, Truck, Stethoscope, Utensils, Package, Briefcase } from "lucide-react";
 import Reveal from "./ui/Reveal";
 import TiltCard from "./ui/TiltCard";
 import { siteData } from "../data/siteData";
+
+const Icons = { Car, Truck, Stethoscope, Utensils, Package, Briefcase };
 
 const industryIcon = (industry) => {
   const t = (industry || "").toLowerCase();

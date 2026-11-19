@@ -1,9 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-import * as Icons from "lucide-react";
+import { Settings, Sliders, FileText, GraduationCap, LifeBuoy, Circle } from "lucide-react";
 import Reveal from "./ui/Reveal";
 import TiltCard from "./ui/TiltCard";
 import { siteData } from "../data/siteData";
+
+// Named imports only (importing all of lucide made the bundle ~1 MB).
+const Icons = { Settings, Sliders, FileText, GraduationCap, LifeBuoy, Circle };
 
 export default function Services() {
   const { services } = siteData;
