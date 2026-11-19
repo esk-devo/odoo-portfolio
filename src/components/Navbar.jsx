@@ -12,10 +12,12 @@ const FOCUSABLE = 'a[href], button:not([disabled])';
 function useActiveSection() {
   const [active, setActive] = useState(null);
   useEffect(() => {
-    const sections = document.querySelectorAll("main section[id]");
+    // Watch every section; ones without an id (e.g. clients) clear the highlight.
+    const sections = document.querySelectorAll("main section");
     if (!sections.length || !("IntersectionObserver" in window)) return;
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(`#${e.target.id}`)),
+      (entries) =>
+        entries.forEach((e) => e.isIntersecting && setActive(e.target.id ? `#${e.target.id}` : null)),
       { rootMargin: "-45% 0px -50% 0px" }
     );
     sections.forEach((s) => observer.observe(s));

@@ -82,17 +82,21 @@ export const stats = [
 
 export const clientsCaption = "Trusted by teams in automotive, logistics, healthcare & F&B";
 
-// Clients only (employers live in `experience`). Optional `logo` later: "/logos/<file>.svg".
+export const clientsLabel = "Clients";
+
+// Clients only (employers live in `experience`).
+// To add a logo later: put the SVG in /public/logos and set e.g. logo: "/logos/yam.svg".
+// With a logo the tile shows the image; without one it shows the initials badge + name.
 export const clients = [
-  { name: "YAM Automotive" },
-  { name: "Xpert Logistics" },
-  { name: "OZ Veterinary" },
-  { name: "Mabrouka" },
-  { name: "Daira Rahal" },
-  { name: "Abu El-Khair" },
-  { name: "Ajiad" },
-  { name: "Al Marakhia" },
-  { name: "Al Dawliya" },
+  { name: "YAM Automotive", initials: "YA", logo: null },
+  { name: "Xpert Logistics", initials: "XL", logo: null },
+  { name: "OZ Veterinary", initials: "OZ", logo: null },
+  { name: "Mabrouka", initials: "MB", logo: null },
+  { name: "Daira Rahal", initials: "DR", logo: null },
+  { name: "Abu El-Khair", initials: "AK", logo: null },
+  { name: "Ajiad", initials: "AJ", logo: null },
+  { name: "Al Marakhia", initials: "AM", logo: null },
+  { name: "Al Dawliya", initials: "AD", logo: null },
 ];
 
 export const about = {

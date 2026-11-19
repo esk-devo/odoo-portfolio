@@ -51,6 +51,13 @@
   /* Navbar collapses below 900px → use `nav:` / `max-nav:` variants. */
   --breakpoint-nav: 56.25rem;
 
+  /* Clients marquee: slides the doubled list by half its width. */
+  --animate-marquee: marquee 48s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
   --color-bg: var(--bg);
   --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
@@ -84,6 +91,12 @@
 .dark {
   --glow: var(--purple-soft);
   --gold: var(--primary-tx);
+}
+
+/* Marquee edges fade out. */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 
 /* Hero background — light: subtle 64px grid that fades out at the bottom.
