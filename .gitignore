@@ -1,5 +1,19 @@
 node_modules
-.env
 dist
 *.log
 .DS_Store
+
+# env (keep the example file)
+.env
+.env.*
+!.env.example
+
+# Vercel CLI
+.vercel
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# Docs
+README.md
