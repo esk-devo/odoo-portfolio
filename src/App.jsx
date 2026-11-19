@@ -8,7 +8,7 @@ import About from "./components/About";
 import Experience from "./components/Experience";
 import Expertise from "./components/Expertise";
 import HowItConnects from "./components/HowItConnects";
-import Cases from "./components/Cases";
+import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -25,7 +25,7 @@ export default function App() {
         <Experience />
         <Expertise />
         <HowItConnects />
-        <Cases />
+        <Projects />
         <Contact />
       </main>
       <Footer />

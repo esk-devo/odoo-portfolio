@@ -88,50 +88,6 @@ export const siteData = {
     ],
   },
 
-  showClientNames: true, // set false to hide client names quickly
-
-  projects: {
-    title: "Featured Projects",
-    subtitle: "Real Odoo projects I have worked on.",
-    items: [
-      {
-        name: "YAM Automotive Spare Parts Company",
-        industry: "Auto parts & trading",
-        country: "", // REPLACE ME if known
-        modules: ["Inventory", "Sales", "Purchase", "Accounting"],
-        role: "",
-      },
-      {
-        name: "Xpert Logistics",
-        industry: "Logistics & shipping services",
-        country: "Saudi Arabia",
-        modules: ["Accounting", "Invoicing", "Operations", "Custom Reports"],
-        role: "",
-      },
-      {
-        name: "OZ Veterinary Clinic",
-        industry: "Medical & veterinary care",
-        country: "", // REPLACE ME if known
-        modules: ["POS", "Inventory", "Services Invoicing"],
-        role: "",
-      },
-      {
-        name: "Mabrouka Restaurant and Rahal Restaurant",
-        industry: "Food & beverage",
-        country: "", // REPLACE ME if known
-        modules: ["Odoo POS", "Accounting", "Inventory Management"],
-        role: "",
-      },
-      {
-        name: "Abu El-Khair, Ajiad, Al Marakhia, Al Dawliya",
-        industry: "Trade, import & services",
-        country: "", // REPLACE ME if known
-        modules: ["Sales", "Purchase", "HR", "Accounting"],
-        role: "Full-cycle implementation",
-      },
-    ],
-  },
-
   contact: {
     title: "Contact",
     subtitle: "Have a project or an opportunity? Let's talk.",
