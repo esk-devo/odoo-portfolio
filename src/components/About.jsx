@@ -28,15 +28,6 @@ export default function About() {
             ))}
           </ul>
 
-          <dl className="mt-7 grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
-            {[about.education, about.languages].map((row) => (
-              <div key={row.label}>
-                <dt className="text-sm text-subtle">{row.label}</dt>
-                <dd className="mt-1 text-base font-semibold text-text">{row.value}</dd>
-              </div>
-            ))}
-          </dl>
-
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#contact"

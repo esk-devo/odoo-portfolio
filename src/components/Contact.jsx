@@ -11,7 +11,8 @@ import {
 import Reveal from "./ui/Reveal";
 import SectionHeading from "./ui/SectionHeading";
 import { focusRing } from "./ui/focus";
-import { profile, contactSection, contactForm } from "../data/content";
+import CountryCodePicker from "./CountryCodePicker";
+import { profile, contactSection, contactForm, countryCodes } from "../data/content";
 import useContactForm from "../hooks/useContactForm";
 
 const cardBase = `flex items-center rounded-2xl border border-border bg-surface text-text transition-colors hover:border-primary/40 hover:bg-purple-soft ${focusRing}`;
@@ -24,7 +25,7 @@ const buttonClass = `rounded-xl bg-primary px-5 py-3.5 text-base font-semibold t
 
 export default function Contact() {
   const form = contactForm;
-  const { status, message, submit, reset } = useContactForm();
+  const { status, message, submit, reset, phoneCode, setPhoneCode, phoneError } = useContactForm();
   const formRef = useRef(null);
   // Time the form appeared; humans need more than 3s to fill it.
   const mountedAt = useRef(Date.now());
@@ -98,7 +99,8 @@ export default function Contact() {
       name: formData.get("name"),
       email: formData.get("email"),
       company: formData.get("company"),
-      phone: formData.get("phone"),
+      phone: formData.get("phone"), // national number only; merged in useContactForm
+      phoneCode,
       message: formData.get("message"),
       // Too fast = bot: reuse the honeypot path (fake success, nothing sent).
       botcheck: tooFast ? "too-fast" : formData.get("website"),
@@ -321,6 +323,35 @@ export default function Contact() {
                           placeholder={f.placeholder}
                           className={`${fieldClass} min-h-32 flex-1 resize-none`}
                         />
+                      ) : f.name === "phone" ? (
+                        <>
+                          {/* Country code picker (flag shows the selection) + national number */}
+                          <div className="flex gap-2">
+                            <CountryCodePicker
+                              id="contact-phone-code"
+                              label={form.phoneCountry}
+                              value={phoneCode}
+                              onChange={setPhoneCode}
+                              options={countryCodes}
+                            />
+                            <input
+                              id={f.id}
+                              name={f.name}
+                              type={f.type}
+                              placeholder={f.placeholder}
+                              autoComplete={f.autoComplete}
+                              inputMode={f.inputMode}
+                              aria-invalid={phoneError ? "true" : undefined}
+                              aria-describedby={phoneError ? "contact-phone-error" : undefined}
+                              className={`${fieldClass} min-w-0 flex-1`}
+                            />
+                          </div>
+                          {phoneError && (
+                            <p id="contact-phone-error" className="mt-2 text-sm text-red-700 dark:text-red-400">
+                              {form.phoneInvalid}
+                            </p>
+                          )}
+                        </>
                       ) : (
                         <input
                           id={f.id}
